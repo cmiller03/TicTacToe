@@ -1,3 +1,27 @@
+handleClick = function(event) {
+    var cell = event.target;
+  
+    cell.innerHTML = currentPlayer;
+  
+    if(currentPlayer === "X" ) {
+      playerSelections = playerXSelections;
+      nextPlayer = "O";
+    } else {
+      playerSelections = playerOSelections;
+      nextPlayer = "X";
+    }
+    if(checkWinner()) {
+      alert(currentPlayer + " won!")
+    }
+
+    playerSelections.push(parseInt(cell.id));
+    checkDraw();
+    // resetGame();
+  
+    // Swap players
+    currentPlayer = nextPlayer;
+  }
+  
 var currentPlayer = "X";
 var nextPlayer = "O";
 
@@ -13,13 +37,53 @@ const winningCombinations = [
     [1, 5, 9],
     [3, 5, 7]
   ]
-  handleClick = function(event) {
-    var cell = event.target
-    console.log(cell.id);
-  }
+  
+
   
   var cells = document.querySelectorAll("td");
   
   for(var i = 0; i < cells.length; i++) {
     cells[i].addEventListener('click', handleClick)
   }
+
+  
+  function checkWinner() {
+    console.log("check")
+    // Check if player has all values of each combination
+    for(var i = 0; i < winningCombinations.length; i++) {
+        var combination = winningCombinations[i];
+        var matches = 0;
+        for (var j = 0; j < 3; j++) {
+          var cell = document.getElementById(combination[j])
+          if (cell.innerHTML === currentPlayer){
+            matches++
+            if (matches === 3){
+              return true;
+              }
+            }
+          else break 
+        }
+      }
+    return false
+    }
+    function checkDraw() {
+      console.log(playerOSelections.length)
+      console.log(playerXSelections.length)
+      if(playerOSelections.length + playerXSelections.length >= cells.length && checkWinner() === false) {
+        alert("It's a draw!")
+      }
+
+    } 
+    // function resetGame() {
+    //   if(playerOSelections.length + playerXSelections.length >= cells.length) {
+    //     cell.innerHTML = "";
+    //   }
+    //   if(checkwinner() === true) {
+    //     cell.innerHTML = "";
+    //   }
+    //   // playerXSelections = new Array();
+    //   // playerOSelections = new Array();
+    //   // for(var i = 0; i < cells.length; i++) {
+    //   //   cells[i].innerHTML = "";
+    //   // }
+    // }
